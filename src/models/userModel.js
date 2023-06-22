@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+// require('mongoose-type-email');
+const validator = require('validator');
 const userSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -7,7 +9,8 @@ const userSchema = new mongoose.Schema({
             values: ["Mr", "Mrs", "Miss"],
             message: "{VALUE} is not a valid title"
         },
-        trim: true
+        trim: true,
+        minlength: [1, "title must have at least 1 characters"],
     },
     name: {
         type: String,
@@ -17,37 +20,62 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: [true, "phone is required"],
-        unique: true,
-        trim: true
+        trim: true,
+        validate: {
+            validator: function (value) {
+                return validator.isMobilePhone(value, "en-IN");
+            },
+            message: "Phone number is invalid"
+
+        },
+        unique: [true,"phone no should not exist twice in the database"]
     },
     email: {
         type: String,
         required: [true, "email is required"],
-        unique: true,
-        trim: true
+        trim: true,
+        lowercase: true,
+        validate: {
+            validator: function (value) {
+                return validator.isEmail(value);
+            },
+            message: "Email is invalid"
+
+        },
+        unique: [true, "email should not exist twice in the database"]
+
     },
     password: {
         type: String,
         required: [true, "password is required"],
         minlength: [8, "password must be at least 8 characters"],
-        maxlength: [15, "password must be at most 15 characters"]
-      
+        maxlength: [15, "password must be at most 15 characters"],
+        trim: true
+
     },
     address: {
-        street: {
-            type: String,
-            trim: true
-
-        },
-        city: {
-            type: String,
-            trim: true
-        },
-        pincode: {
-            type: String,
-            trim: true
-        },
+        type: {
+            street: {
+                type: String,
+                trim: true,
+                minlength: [3, 'Street must have at least 3 characters'],
+                maxlength: [50, 'Street cannot exceed 50 characters']
+            },
+            city: {
+                type: String,
+                trim: true,
+                minlength: [3, 'City must have at least 3 characters'],
+                maxlength: [30, 'City cannot exceed 30 characters']
+            },
+            pincode: {
+                type: String,
+                trim: true,
+                minlength: [6, 'Pincode must have at least 6 characters'],
+                maxlength: [6, 'Pincode cannot exceed 6 characters']
+            },
+        }
     }
+
 }, { timestamps: true });
 
 
