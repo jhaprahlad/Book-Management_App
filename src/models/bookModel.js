@@ -3,30 +3,38 @@ const mongoose = require('mongoose');
 const bookSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
+        required: [true, "title is required"],
         unique: true,
+        trim: true
     },
     excerpt: {
         type: String,
-        required: true,
+        required: [true, "excerpt is required"],
+        trim: true
+        
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+        required: [true, "userId is required"],
+        trim:ture,
+        ref: 'User'
     },
     ISBN: {
         type: String,
-        required: true,
+        required: [true, "ISBN is required"],
         unique: true,
+        trim: true
     },
     category: {
         type: String,
-        required: true,
+        required: [true, "category is required"],
+        trim: true,
+
     },
     subcategory: {
         type: String,
-        required: true,
+        required: [true, "subcategory is required"],
+        trim: true
     },
     reviews: {
         type: Number,
@@ -43,7 +51,7 @@ const bookSchema = new mongoose.Schema({
     },
     releasedAt: {
         type: Date,
-        required: true,
+        required: [true, "releasedAt is required"],
         format: 'YYYY-MM-DD',
     },
     reviewsData : {
