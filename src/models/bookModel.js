@@ -11,19 +11,27 @@ const bookSchema = new mongoose.Schema({
         type: String,
         required: [true, "excerpt is required"],
         trim: true
-        
+
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         required: [true, "userId is required"],
-        trim:ture,
+        trim: true,
         ref: 'User'
     },
     ISBN: {
         type: String,
         required: [true, "ISBN is required"],
         unique: true,
-        trim: true
+        trim: true,
+        validate: {
+            validator: function (value) {
+              // Custom validation logic for ISBN
+              const isbnRegex = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/;
+              return isbnRegex.test(value);
+            },
+            message: "Invalid ISBN"
+          }
     },
     category: {
         type: String,
@@ -42,8 +50,7 @@ const bookSchema = new mongoose.Schema({
         comment: 'Holds number of reviews of this book',
     },
     deletedAt: {
-        type: Date,
-        default: null,
+        type: Date
     },
     isDeleted: {
         type: Boolean,
@@ -52,11 +59,13 @@ const bookSchema = new mongoose.Schema({
     releasedAt: {
         type: Date,
         required: [true, "releasedAt is required"],
-        format: 'YYYY-MM-DD',
-    },
-    reviewsData : {
-        type: Array,
-        default: [],
+        // format: 'YYYY-MM-DD',
+        validator: function (value) {
+            // Custom validation logic for date format
+            const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
+            return dateFormatRegex.test(value);
+        },
+        message: "releasedAt must be in the format 'YYYY-MM-DD'"
     }
 }, { timestamps: true });
 

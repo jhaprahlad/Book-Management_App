@@ -12,8 +12,6 @@ const createUser = async function (req, res) {
             // message: "User created successfully",
             data: user
         })
-
-
     } catch (error) {
         if (error.message.includes("validation")) {
             return res.status(400).send({ status: false, message: error.message })
