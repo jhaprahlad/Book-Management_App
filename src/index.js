@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();;
 const mongoose = require("mongoose");
-const dotenv = require("dotenv").config;
+const dotenv = require("dotenv").config();
 const routes = require("../src/routes/route.js");
 
 app.use(express.json());
@@ -19,6 +19,7 @@ mongoose.connect(process.env.MONGODB_CONNECT,
     .catch((err) => {
         console.log(err);
     })
+    
 
 
 app.listen(process.env.PORT, () => {

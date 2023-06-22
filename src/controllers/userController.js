@@ -1,5 +1,6 @@
 const userModel = require("../models/userModel")
 const validator = require("validator")
+const jwt = require("jsonwebtoken")
 
 const createUser = async function (req, res) {
     try {
@@ -18,7 +19,7 @@ const createUser = async function (req, res) {
             return res.status(400).send({ status: false, message: error.message })
         }
         else if (error.message.includes("duplicate")) {
-            return res.status(400).send({ status: false, message: "email should be unique" })
+            return res.status(400).send({ status: false, message: "Email or phone no. is not unique" })
         }
         else {
             return res.status(500).send({ status: false, message: error.message })
@@ -26,8 +27,38 @@ const createUser = async function (req, res) {
     }
 }
 
+const loginUser = async function (req, res) {
+    try {
+        if (Object.keys(req.body).length == 2) {
+            const { email, password } = req.body
+            if (!email || !password) {
+                return res.status(400).json({ status: false, message: 'email or password is missing' });
+            }
+            const user = await userModel.findOne({ email: email, password: password });
+            if (!user) {
+                return res.status(401).json({ status: false, message: 'User not found' });
+            }
+            const token = jwt.sign(
+                { userId: user._id },
+                "Prahlad_Secret_key",
+                { expiresIn: "1h" }
+            );
+            res.setHeader('x-api-key', token);
+            return res.status(200).json({ status: true, data: { token: token } });
+
+        }
+
+    } catch (error) {
+        return res.status(500).send({ status: false, message: error.message })
+
+    }
+}
+
+
 module.exports = {
-    createUser
+    createUser,
+    loginUser
+
 }
 
 

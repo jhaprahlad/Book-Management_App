@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
             message: "Phone number is invalid"
 
         },
-        unique: [true,"phone no should not exist twice in the database"]
+        unique: [true, "phone no should not exist twice in the database"]
     },
     email: {
         type: String,
@@ -54,6 +54,13 @@ const userSchema = new mongoose.Schema({
 
     },
     address: {
+        // validate: {
+        //     validator: function (value) {
+        //         return typeof value === 'object' && value !== null;
+        //     },
+        //     message: 'Address must be an object'
+        // },
+
         type: {
             street: {
                 type: String,
