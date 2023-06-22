@@ -2,38 +2,50 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     title: {
         type: String,
-        enum: ['Mr', 'Mrs', 'Miss'],
-        required: true,
+        required: [true, "title is required"],
+        enum: {
+            values: ["Mr", "Mrs", "Miss"],
+            message: "{VALUE} is not a valid title"
+        },
+        trim: true
     },
     name: {
         type: String,
-        required: true,
+        required: [true, "name is required"],
+        trim: true
     },
     phone: {
         type: String,
-        required: true,
+        required: [true, "phone is required"],
         unique: true,
+        trim: true
     },
     email: {
         type: String,
-        required: true,
+        required: [true, "email is required"],
         unique: true,
+        trim: true
     },
     password: {
         type: String,
-        required: true,
-        minLength: 8,
-        maxLength: 15,
+        required: [true, "password is required"],
+        minlength: [8, "password must be at least 8 characters"],
+        maxlength: [15, "password must be at most 15 characters"]
+      
     },
     address: {
         street: {
             type: String,
+            trim: true
+
         },
         city: {
             type: String,
+            trim: true
         },
         pincode: {
             type: String,
+            trim: true
         },
     }
 }, { timestamps: true });
