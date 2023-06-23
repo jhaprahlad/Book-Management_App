@@ -7,7 +7,7 @@ const authentication = (req, res, next) => {
         if (!token) {
             return res.status(401).json({ status: false, message: "Unauthorized" });
         }
-        const decoded = jwt.verify(token, );
+        const decoded = jwt.verify(token,"Prahlad_Secret_key");
         req.userId = decoded.userId;
         next();
     } catch (error) {

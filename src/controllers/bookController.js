@@ -32,6 +32,10 @@ const createBook = async function (req, res) {
                 .json({ status: false, message: "User does not exist" });
         }
 
+        if(userId != req.userId){
+            return res.status(401).json({status: false, message: 'Unauthorized'})
+        }
+
         const book = await bookModel.create({
             title,
             excerpt,
@@ -158,7 +162,19 @@ const updateBook = async function (req, res) {
                 .send({ status: false, message: "bookId is invalid" });
         }
         const data = req.body;
+
         const { title, excerpt, ISBN, releasedAt } = data;
+
+        const book = await bookModel.findOne({ _id: bookId, isDeleted: false });
+
+        if (!book) {
+            return res.status(404).json({ status: false, message: 'Book does not exist' });
+        }
+
+        if (book.userId != req.userId) {
+            return res.status(403).json({ status: false, message: 'Access denied' });
+        }
+
         const updatedBook = await bookModel.findOneAndUpdate(
             { _id: bookId, isDeleted: false },
             {
@@ -197,7 +213,19 @@ const deleteBook = async function (req, res) {
             return res
                 .status(400)
                 .send({ status: false, message: "bookId is invalid" });
+
         }
+        const book = await bookModel.findOne({ _id: bookId, isDeleted: false });
+
+
+        if (!book) {
+            return res.status(404).json({ status: false, message: 'Book does not exist' });
+        }
+
+        if (book.userId != req.userId) {
+            return res.status(403).json({ status: false, message: 'Access denied' });
+        }
+        
         const deletedBook = await bookModel.findOneAndUpdate(
             { _id: bookId, isDeleted: false },
             { $set: { isDeleted: true, deletedAt: Date.now() } },
