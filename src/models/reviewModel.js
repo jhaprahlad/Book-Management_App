@@ -18,8 +18,14 @@ const reviewSchema = new mongoose.Schema({
     rating: {
         type: Number,
         required: [true, "rating is required"],
-        min: 1,
-        max: 5,
+        min: {
+            value: 1,
+            message: "Rating must be at least 1"
+          },
+          max: {
+            value: 5,
+            message: "Rating cannot exceed 5"
+          }
     },
     review: {
         type: String,

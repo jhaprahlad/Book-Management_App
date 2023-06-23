@@ -139,7 +139,7 @@ const getBookByParams = async function (req, res) {
             review: 1,
         });
         book.reviewData = reviews;
-        book.reviews = reviews.length;
+        // book.reviews = reviews.length;
 
         return res
             .status(200)
