@@ -1,32 +1,25 @@
 const mongoose = require('mongoose');
-/*{
-  bookId: {ObjectId, mandatory, refs to book model},
-  reviewedBy: {string, mandatory, default 'Guest', value: reviewer's name},
-  reviewedAt: {Date, mandatory},
-  rating: {number, min 1, max 5, mandatory},
-  review: {string, optional}
-  isDeleted: {boolean, default: false},
-}*/
+
 const reviewSchema = new mongoose.Schema({
     bookId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Book',
-        required: true,
+        required:[true, "bookId is required"]
     },
     reviewedBy: {
         type: String,
-        required: true,
+        required: [true, "reviewedBy is required"],
         default: 'Guest',
     },
     reviewedAt: {
         type: Date,
-        required: true,
+        required: [true, "reviewedAt is required"],
     },
     rating: {
         type: Number,
+        required: [true, "rating is required"],
         min: 1,
         max: 5,
-        required: true,
     },
     review: {
         type: String,
