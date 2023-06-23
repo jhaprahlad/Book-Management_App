@@ -11,7 +11,7 @@ const authentication = (req, res, next) => {
         req.userId = decoded.userId;
         next();
     } catch (error) {
-        if (err.message.includes("signature") || error.message.includes("token") || error.message.includes("malformed")) {
+        if (error.message.includes("signature") || error.message.includes("token") || error.message.includes("malformed")) {
 
             // console.log(err.message)
             return res.status(401).send({ status: false, message: "You are not Authenticated" })
