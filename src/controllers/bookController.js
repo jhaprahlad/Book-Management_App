@@ -155,7 +155,7 @@ const updateBook = async function (req, res) {
         if (!ObjectId.isValid(bookId)) {
             return res
                 .status(400)
-                .json({ status: false, message: "bookId is invalid" });
+                .send({ status: false, message: "bookId is invalid" });
         }
         const data = req.body;
         const { title, excerpt, ISBN, releasedAt } = data;
@@ -196,7 +196,7 @@ const deleteBook = async function (req, res) {
         if (!ObjectId.isValid(bookId)) {
             return res
                 .status(400)
-                .json({ status: false, message: "bookId is invalid" });
+                .send({ status: false, message: "bookId is invalid" });
         }
         const deletedBook = await bookModel.findOneAndUpdate(
             { _id: bookId, isDeleted: false },

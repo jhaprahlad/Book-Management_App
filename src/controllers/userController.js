@@ -30,11 +30,11 @@ const loginUser = async function (req, res) {
         if (Object.keys(req.body).length == 2) {
             const { email, password } = req.body
             if (!email || !password) {
-                return res.status(400).json({ status: false, message: 'email or password is missing' });
+                return res.status(400).send({ status: false, message: 'email or password is missing' });
             }
             const user = await userModel.findOne({ email: email, password: password });
             if (!user) {
-                return res.status(401).json({ status: false, message: 'User not found' });
+                return res.status(401).send({ status: false, message: 'User not found' });
             }
             const token = jwt.sign(
                 { userId: user._id },
@@ -42,7 +42,7 @@ const loginUser = async function (req, res) {
                 { expiresIn: "1h" }
             );
             res.setHeader('x-api-key', token);
-            return res.status(200).json({ status: true, data: { token: token } });
+            return res.status(200).send({ status: true, data: { token: token } });
 
         }
 
